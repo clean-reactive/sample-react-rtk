@@ -1,0 +1,47 @@
+import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import type { Controller } from "../../OrderItem.types";
+import {
+  useDeleteOrderItemMutation,
+  useDeleteOrderMutation,
+  makeDeleteOrderItemFixedCacheKey,
+  makeDeleteOrderFixedCacheKey,
+  ordersRepository,
+  ordersTag,
+  type ItemEntityId,
+  type OrderEntityId,
+} from "../../../../repositories";
+import { useOrderByIdSelector } from "../../../../hooks";
+
+export const useController = (params: {
+  orderId: OrderEntityId;
+  itemId: ItemEntityId;
+}): Controller => {
+  const dispatch = useDispatch();
+  const order = useOrderByIdSelector(params.orderId);
+  const isLastItem = (order?.itemEntities.length ?? 0) === 1;
+
+  const [deleteOrderItem] = useDeleteOrderItemMutation({
+    fixedCacheKey: makeDeleteOrderItemFixedCacheKey(params.orderId, params.itemId),
+  });
+  const [deleteOrder] = useDeleteOrderMutation({
+    fixedCacheKey: makeDeleteOrderFixedCacheKey(params.orderId),
+  });
+
+  const deleteOrderItemButtonClicked = useCallback(async () => {
+    try {
+      if (isLastItem) {
+        await deleteOrder({ orderId: params.orderId }).unwrap();
+      } else {
+        await deleteOrderItem(params).unwrap();
+      }
+      dispatch(ordersRepository.util.invalidateTags([ordersTag]));
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  }, [deleteOrder, deleteOrderItem, dispatch, isLastItem, params]);
+
+  return {
+    deleteOrderItemButtonClicked,
+  };
+};

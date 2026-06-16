@@ -1,0 +1,1 @@
+export { isOrdersResource } from "./isOrdersResource";

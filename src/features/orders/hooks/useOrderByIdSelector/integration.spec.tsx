@@ -118,6 +118,7 @@ describe(`${useOrderByIdSelector.name}: Delete Order and Item`, () => {
 
     context.ordersServiceMock.getOrders
       .mockResolvedValueOnce(initialOrders)
+      .mockResolvedValueOnce(ordersAfterOrderDeletion)
       .mockResolvedValueOnce(ordersAfterItemDeletion);
 
     context.ordersServiceMock.deleteOrder.mockResolvedValue();

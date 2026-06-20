@@ -33,6 +33,7 @@ export const ordersRepository = createApi({
       structuralSharing: false,
     }),
     deleteOrder: builder.mutation<void, { orderId: OrderEntityId }>({
+      invalidatesTags: [ordersTag],
       queryFn: async ({ orderId }, { getState }) => {
         try {
           const { ordersPresentation } = getState() as StateWithOrderPresentationEntity;
@@ -58,6 +59,7 @@ export const ordersRepository = createApi({
       },
     }),
     deleteOrderItem: builder.mutation<void, { orderId: OrderEntityId; itemId: ItemEntityId }>({
+      invalidatesTags: [ordersTag],
       queryFn: async ({ orderId, itemId }, { getState }) => {
         try {
           const { ordersPresentation } = getState() as StateWithOrderPresentationEntity;

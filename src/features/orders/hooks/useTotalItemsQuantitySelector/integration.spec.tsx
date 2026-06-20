@@ -77,8 +77,11 @@ describe(`${useTotalItemsQuantitySelector.name} Integration Test for Order delet
     const orderId = context.orders.at(0)!.id;
 
     const initialOrders = context.orders.slice();
+    const ordersAfterOrderDeletion = context.orders.slice(1);
 
-    context.ordersServiceMock.getOrders.mockResolvedValueOnce(initialOrders);
+    context.ordersServiceMock.getOrders
+      .mockResolvedValueOnce(initialOrders)
+      .mockResolvedValueOnce(ordersAfterOrderDeletion);
     context.ordersServiceMock.deleteOrder.mockResolvedValueOnce();
 
     render(<context.Sut orderId={orderId} />);
@@ -187,8 +190,16 @@ describe(`${useTotalItemsQuantitySelector.name} Integration Test for Order delet
     const itemId = remainingOrder.itemEntities.at(0)!.id;
 
     const initialOrders = context.orders.slice();
+    const ordersAfterOrderDeletion = context.orders.slice(1);
+    const ordersAfterItemDeletion = [
+      { ...remainingOrder, itemEntities: remainingOrder.itemEntities.slice(1) },
+      ...context.orders.slice(2),
+    ];
 
-    context.ordersServiceMock.getOrders.mockResolvedValueOnce(initialOrders);
+    context.ordersServiceMock.getOrders
+      .mockResolvedValueOnce(initialOrders)
+      .mockResolvedValueOnce(ordersAfterOrderDeletion)
+      .mockResolvedValueOnce(ordersAfterItemDeletion);
     context.ordersServiceMock.deleteOrder.mockResolvedValueOnce();
     context.ordersServiceMock.deleteItem.mockResolvedValueOnce();
 

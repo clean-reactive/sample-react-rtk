@@ -1,16 +1,18 @@
-import type { Nominal, UniqueEntity } from "../../../../@types";
+import type { Nominal } from "../../../../@types";
 import type { OrdersPresentationEntity } from "../../stores";
 
 export type OrderEntityId = Nominal<string, "ORDER_ENTITY_ID">;
 
-export type OrderEntity = UniqueEntity<OrderEntityId> & {
+export type OrderEntity = {
+  id: OrderEntityId;
   userId: string;
   itemEntities: ItemEntity[];
 };
 
 export type ItemEntityId = Nominal<string, "ITEM_ENTITY_ID">;
 
-export type ItemEntity = UniqueEntity<ItemEntityId> & {
+export type ItemEntity = {
+  id: ItemEntityId;
   productId: string;
   quantity: number;
 };

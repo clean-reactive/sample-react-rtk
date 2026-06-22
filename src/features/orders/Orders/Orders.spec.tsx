@@ -29,8 +29,6 @@ describe(`${Orders.displayName}`, () => {
 
   it("renders loading state", () => {
     vi.mocked(usePresenter).mockReturnValue({
-      isLoading: true,
-      isMutating: false,
       isProcessing: true,
       statusLabel: "loading",
       orderIds: [],
@@ -45,8 +43,6 @@ describe(`${Orders.displayName}`, () => {
   it("renders multiple orders", () => {
     const orderIds = ["1", "2", "3"] as OrderEntityId[];
     vi.mocked(usePresenter).mockReturnValue({
-      isLoading: false,
-      isMutating: false,
       isProcessing: false,
       statusLabel: "idle",
       orderIds,
@@ -63,8 +59,6 @@ describe(`${Orders.displayName}`, () => {
 
   it("renders empty state", () => {
     vi.mocked(usePresenter).mockReturnValue({
-      isLoading: false,
-      isMutating: false,
       isProcessing: false,
       statusLabel: "idle",
       orderIds: [],
@@ -79,8 +73,6 @@ describe(`${Orders.displayName}`, () => {
 
   it("calls moduleDestroyed on unmount", () => {
     vi.mocked(usePresenter).mockReturnValue({
-      isLoading: false,
-      isMutating: false,
       isProcessing: false,
       statusLabel: "idle",
       orderIds: [],

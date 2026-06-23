@@ -1,13 +1,12 @@
 import type { FC } from "react";
 import { totalItemQuantityTestId } from "../testIds";
-import { useOrderIdsSelector, useOrdersSelector, useTotalItemsQuantitySelector } from "../hooks";
+import { useOrdersSelector, useTotalItemsQuantitySelector } from "../hooks";
 
 export const OrdersStatistics: FC = () => {
   const orders = useOrdersSelector();
-  const orderIds = useOrderIdsSelector();
 
   const uniqueUsersCount = new Set(orders.map((order) => order.userId)).size;
-  const ordersCount = orderIds.length;
+  const ordersCount = orders.length;
   const itemLinesCount = orders.reduce((acc, order) => acc + order.itemEntities.length, 0);
   const totalItemsQuantity = useTotalItemsQuantitySelector();
 

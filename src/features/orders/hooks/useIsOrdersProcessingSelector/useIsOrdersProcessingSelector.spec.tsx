@@ -1,7 +1,8 @@
 import type { UserEvent } from "@testing-library/user-event";
 import type { FC, PropsWithChildren } from "react";
 import { describe, beforeEach, vi, afterEach, it, expect } from "vitest";
-import { makeDeferred, output } from "../../../../utils/testing";
+import { Deferred } from "@esfx/async-deferred";
+import { output } from "../../../../utils/testing";
 import type { OrderEntity } from "../../repositories";
 import {
   makeOrderEntityId,
@@ -79,7 +80,7 @@ describe(`${useIsOrdersProcessingSelector.name}`, () => {
   });
 
   it<LocalTestContext>("displays isLoading as true when orders are being fetched", async (context) => {
-    const { promise } = makeDeferred<OrderEntity[]>();
+    const { promise } = new Deferred<OrderEntity[]>();
     context.ordersServiceMock.getOrders.mockReturnValue(promise);
 
     render(<context.Sut />);
@@ -104,7 +105,7 @@ describe(`${useIsOrdersProcessingSelector.name}`, () => {
   });
 
   it<LocalTestContext>("displays isLoading as true when order item is being deleted", async (context) => {
-    const { promise } = makeDeferred<void>();
+    const { promise } = new Deferred<void>();
     context.ordersServiceMock.getOrders.mockResolvedValue([]);
     context.ordersServiceMock.deleteItem.mockReturnValue(promise);
 

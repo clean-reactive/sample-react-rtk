@@ -5,7 +5,7 @@ import type { OrderEntity } from "../../../../repositories";
 import { makeOrderEntities, resetOrderEntitiesFactories } from "../../../../utils/testing";
 import { makeComponentFixture } from "../../../../utils/testing/makeComponentFixture";
 import { usePresenter } from "./usePresenter";
-import { makeDeferred } from "../../../../../../utils/testing";
+import { Deferred } from "@esfx/async-deferred";
 import { useDeleteOrderMutation, makeDeleteOrderFixedCacheKey } from "../../../../repositories";
 import {
   makeOrdersServiceMock,
@@ -37,7 +37,7 @@ describe(`${usePresenter.name}`, () => {
 
   it<LocalTestContext>("optimistically removes order once deletion is triggered", async (context) => {
     const order0 = context.orders.at(1)!;
-    const { promise } = makeDeferred<void>();
+    const { promise } = new Deferred<void>();
     context.ordersServiceMock.getOrders.mockResolvedValue(context.orders);
     context.ordersServiceMock.deleteOrder.mockReturnValue(promise);
 

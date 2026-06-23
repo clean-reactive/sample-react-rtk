@@ -1,6 +1,7 @@
 import type { FC, PropsWithChildren } from "react";
 import { describe, beforeEach, vi, afterEach, it, expect, assert } from "vitest";
-import { makeDeferred, output } from "../../../../utils/testing";
+import { Deferred } from "@esfx/async-deferred";
+import { output } from "../../../../utils/testing";
 import type { OrderEntity, OrderEntityId } from "../../repositories";
 import { makeOrderEntityId } from "../../repositories";
 import { makeOrderEntities, resetOrderEntitiesFactories } from "../../utils/testing";
@@ -99,7 +100,7 @@ describe(`${useOrderByIdSelector.name}`, () => {
   });
 
   it<LocalTestContext>("returns undefined while orders are being loaded", async (context) => {
-    const { promise } = makeDeferred<OrderEntity[]>();
+    const { promise } = new Deferred<OrderEntity[]>();
     context.ordersServiceMock.getOrders.mockReturnValue(promise);
     const orderId = makeOrderEntityId("123");
 

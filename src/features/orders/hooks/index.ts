@@ -1,7 +1,6 @@
 export * from "./useOrdersSelector";
 export * from "./useItemByIdSelector";
 export * from "./useOrdersResourceSelector";
-export * from "./useIsOrdersProcessingSelector";
 export * from "./useIsOrdersMutatingSelector";
 export * from "./useTotalItemsQuantitySelector";
 export * from "./useOrderByIdSelector";

@@ -4,7 +4,7 @@ import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { makeItemEntityId, makeOrderEntityId } from "../../../../repositories";
 import type { OrderEntity } from "../../ordersRepository.types";
-import { orderDtoFactory, OrdersApi, ordersApiUrl } from "../../../../api/OrdersApi";
+import { apiOrderDtoFactory, ApiOrders, apiOrdersResource } from "../../../../api/OrdersApi";
 
 const server = setupServer();
 
@@ -19,15 +19,15 @@ describe(`${RemoteOrdersService.name}`, () => {
     });
   });
   beforeEach<LocalTestContext>((context) => {
-    orderDtoFactory.resetCount();
+    apiOrderDtoFactory.resetCount();
     context.gateway = RemoteOrdersService.make();
   });
   afterAll(() => {
     server.close();
   });
-  describe("getOrders", () => {
+  describe(`${RemoteOrdersService.prototype.getOrders.name}`, () => {
     it<LocalTestContext>("fetches order entities", async (context) => {
-      const ordersDto = orderDtoFactory.list({ count: 1 });
+      const ordersDto = apiOrderDtoFactory.list({ count: 1 });
 
       const expected: OrderEntity[] = [
         {
@@ -42,7 +42,7 @@ describe(`${RemoteOrdersService.name}`, () => {
       ];
 
       server.use(
-        http.get(ordersApiUrl, () => HttpResponse.json(ordersDto), {
+        http.get(apiOrdersResource, () => HttpResponse.json(ordersDto), {
           once: true,
         }),
       );
@@ -51,12 +51,12 @@ describe(`${RemoteOrdersService.name}`, () => {
     });
   });
 
-  describe("deleteOrder", () => {
+  describe(`${RemoteOrdersService.prototype.deleteOrder.name}`, () => {
     it<LocalTestContext>("deletes order", async (context) => {
       const orderId = makeOrderEntityId("1");
 
       server.use(
-        http.delete(`${ordersApiUrl}/${orderId}`, () => HttpResponse.json(), {
+        http.delete(`${apiOrdersResource}/${orderId}`, () => HttpResponse.json(), {
           once: true,
         }),
       );
@@ -65,14 +65,14 @@ describe(`${RemoteOrdersService.name}`, () => {
     });
   });
 
-  describe("deleteItem", () => {
+  describe(`${RemoteOrdersService.prototype.deleteItem.name}`, () => {
     it<LocalTestContext>("deletes item from order", async () => {
-      const api = OrdersApi.make();
+      const api = ApiOrders.make();
       const gateway = new RemoteOrdersService(api);
 
       vi.spyOn(api, "updateOrder");
 
-      const orderDto = orderDtoFactory.item();
+      const orderDto = apiOrderDtoFactory.item();
       const orderId = makeOrderEntityId(orderDto.id);
       const itemId = makeItemEntityId(orderDto.items[0].id);
 
@@ -83,10 +83,10 @@ describe(`${RemoteOrdersService.name}`, () => {
       };
 
       server.use(
-        http.get(`${ordersApiUrl}/${orderId}`, () => HttpResponse.json(orderDto), {
+        http.get(`${apiOrdersResource}/${orderId}`, () => HttpResponse.json(orderDto), {
           once: true,
         }),
-        http.put(`${ordersApiUrl}/${orderId}`, () => HttpResponse.json(), {
+        http.put(`${apiOrdersResource}/${orderId}`, () => HttpResponse.json(), {
           once: true,
         }),
       );
@@ -97,17 +97,17 @@ describe(`${RemoteOrdersService.name}`, () => {
     });
 
     it<LocalTestContext>("does nothing when item is not found in order", async () => {
-      const api = OrdersApi.make();
+      const api = ApiOrders.make();
       const gateway = new RemoteOrdersService(api);
 
       vi.spyOn(api, "updateOrder");
 
-      const orderDto = orderDtoFactory.item();
+      const orderDto = apiOrderDtoFactory.item();
       const orderId = makeOrderEntityId(orderDto.id);
       const nonExistentItemId = makeItemEntityId("non-existent");
 
       server.use(
-        http.get(`${ordersApiUrl}/${orderId}`, () => HttpResponse.json(orderDto), {
+        http.get(`${apiOrdersResource}/${orderId}`, () => HttpResponse.json(orderDto), {
           once: true,
         }),
       );

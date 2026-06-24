@@ -1,16 +1,16 @@
 import type { ApiHttpClient } from "../types";
 import { HttpClient } from "../httpClient";
-import type { ApiOrderDto } from "./OrdersApi.types";
+import type { ApiOrderDto } from "./ApiOrders.types";
 
 const baseUrl = import.meta.env.BASE_URL;
-export const ordersApiUrl = `${baseUrl}api/orders`;
+export const apiOrdersResource = `${baseUrl}api/orders`;
 
-export class OrdersApi {
-  static make(): OrdersApi {
-    return new OrdersApi(HttpClient.make());
+export class ApiOrders {
+  static make(): ApiOrders {
+    return new ApiOrders(HttpClient.make());
   }
 
-  private ordersApiUrl = ordersApiUrl;
+  private ordersApiUrl = apiOrdersResource;
 
   constructor(private readonly httpClient: ApiHttpClient) {}
 

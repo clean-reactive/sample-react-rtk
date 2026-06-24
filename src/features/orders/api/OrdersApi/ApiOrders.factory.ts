@@ -1,14 +1,14 @@
 import { factoryT, fields } from "factory-t";
-import type { ApiOrderDto, ApiOrderItemDto } from "./OrdersApi.types";
+import type { ApiOrderDto, ApiOrderItemDto } from "./ApiOrders.types";
 import { randomFrom1To100 } from "../../../../utils/testing";
 
-export const orderDtoFactory = factoryT<ApiOrderDto>({
+export const apiOrderDtoFactory = factoryT<ApiOrderDto>({
   id: (ctx) => `${ctx.index}`,
   userId: fields.sequence(randomFrom1To100.map((n) => n.toString())),
-  items: () => orderItemDtoFactory.list({ count: 3 }),
+  items: () => apiOrderItemDtoFactory.list({ count: 3 }),
 });
 
-export const orderItemDtoFactory = factoryT<ApiOrderItemDto>({
+export const apiOrderItemDtoFactory = factoryT<ApiOrderItemDto>({
   id: (ctx) => `${ctx.index}`,
   productId: fields.sequence(
     randomFrom1To100.slice(randomFrom1To100.length / 2).map((v) => v.toString()),

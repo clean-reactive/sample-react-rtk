@@ -1,3 +1,3 @@
-export * from "./OrdersApi";
-export * from "./OrdersApi.types";
-export * from "./OrdersApi.factory";
+export * from "./ApiOrders";
+export * from "./ApiOrders.types";
+export * from "./ApiOrders.factory";

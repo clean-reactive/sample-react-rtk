@@ -1,4 +1,4 @@
-import { OrdersApi, type ApiOrderDto } from "../../../../api";
+import { ApiOrders, type ApiOrderDto } from "../../../../api";
 import type {
   ItemEntityId,
   OrderEntity,
@@ -9,10 +9,10 @@ import { toOrderEntity } from "./mappers";
 
 export class RemoteOrdersService implements OrdersGateway {
   static make(): RemoteOrdersService {
-    return new RemoteOrdersService(OrdersApi.make());
+    return new RemoteOrdersService(ApiOrders.make());
   }
 
-  constructor(private api: OrdersApi) {}
+  constructor(private api: ApiOrders) {}
 
   async getOrders(): Promise<OrderEntity[]> {
     const ordersDto = await this.api.getOrders();
